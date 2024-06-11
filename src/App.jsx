@@ -1,5 +1,5 @@
-import { BrowserRouter, Routes, Route, Navigate, Outlet, useLocation } from 'react-router-dom';
 import React from 'react';
+import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import ProductList from './components/ProductList';
 import CreateProduct from './components/CreateProduct';
@@ -16,26 +16,35 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
 
-                <Route element={<ProtectedLayout token={token} />}>
-                    <Route index element={<ProductList />} />
-                    <Route path="create" element={<CreateProduct />} />
-                    <Route path="edit/:id" element={<EditProduct />} />
+                <Route element={<ProtectedRoutesWithNavbar />}>
+                    <Route path="/" element={<ProductList />} />
+                </Route>
+
+                <Route element={<ProtectedRoutes />}>
+                    <Route path="/create" element={<CreateProduct />} />
+                    <Route path="/edit/:id" element={<EditProduct />} />
                 </Route>
             </Routes>
         </BrowserRouter>
     );
 }
 
+function ProtectedRoutes() {
+    const token = localStorage.getItem('token');
+    return token ? <Outlet /> : <Navigate to="/login" replace />;
+}
 
-function ProtectedLayout({ token }) {
-    const location = useLocation();
-
-    return (
-        <div>
-            {location.pathname === '/' && token && <Navbar />}
+function ProtectedRoutesWithNavbar() {
+    const token = localStorage.getItem('token');
+    return token ? (
+        <>
+            <Navbar />
             <Outlet />
-        </div>
+        </>
+    ) : (
+        <Navigate to="/login" replace />
     );
 }
+
 
 export default App;
