@@ -22,20 +22,27 @@ const EditProduct = () => {
     const fetchProduct = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await axios.get(`https://api-heaven.onrender.com/api/products/${id}`, {
+            const response = await axios.get(`${import.meta.env.VITE_BACK_URL}/api/products/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
             setProduct(response.data.data);
         } catch (error) {
-            console.error(error);
+            setError(error.message || 'Error fetching product');
         }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!product.products || !product.name || !product.price || !product.type || !product.ml) {
+            setError('Please fill in all fields.');
+            return;
+        }
+
         try {
+
             const token = localStorage.getItem('token');
             const formData = new FormData();
             formData.append('products', product.products);
@@ -47,14 +54,14 @@ const EditProduct = () => {
                 formData.append('imagen', product.imagen);
             }
 
-            await axios.put(`https://api-heaven.onrender.com/api/products/${id}`, formData, {
+            await axios.put(`${import.meta.env.VITE_BACK_URL}/api/products/${id}`, formData, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
             navigate('/');
         } catch (error) {
-            console.error(error);
+            setError(error.message || 'Error updating product');
         }
     };
 

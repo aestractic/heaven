@@ -12,7 +12,7 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get('https://api-heaven.onrender.com/api/products', {
+            const response = await axios.get(`${import.meta.env.VITE_BACK_URL}/api/products`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

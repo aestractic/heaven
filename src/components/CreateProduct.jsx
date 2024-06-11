@@ -37,7 +37,7 @@ const CreateProduct = () => {
 
             // Include token in Authorization header if it exists
             if (token) {
-                await axios.post('https://api-heaven.onrender.com/api/products', formData, {
+                await axios.post(`${import.meta.env.VITE_BACK_URL}/api/products`, formData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

@@ -11,7 +11,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('https://api-heaven.onrender.com/api/users', { name, email, password });
+            await axios.post(`${import.meta.env.VITE_BACK_URL}/api/users`, { name, email, password });
             navigate('/login');
         } catch (error) {
             console.error(error);
